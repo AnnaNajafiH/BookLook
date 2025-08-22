@@ -6,7 +6,7 @@ const userSchema = new Schema(
   {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    email: { type: String, required: true,unique: true,match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/},
+    email: { type: String, required: true, unique: true, match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ },
     password: { type: String, required: true },
     image: { type: String, default: "https://i.ibb.co/4pDNDk1/avatar.png" },
     aboutMe: { type: String },
@@ -20,31 +20,23 @@ const userSchema = new Schema(
     city: { type: String },
     state: { type: String },
     country: { type: String },
-    likedBookshelves: [{ type: Schema.Types.ObjectId, ref: "Bookshelf" },],
+    likedBookshelves: [{ type: Schema.Types.ObjectId, ref: "Bookshelf" }],
 
     borrowedBooks: [
-      {_id:{ type: mongoose.Types.ObjectId, ref: "BorrowedBook" },},
-      {_id: { type: mongoose.Types.ObjectId, ref: "Bookshelf" },},
+      {
+        borrowedBook: { type: Schema.Types.ObjectId, ref: "BorrowedBook" },
+        bookshelf: { type: Schema.Types.ObjectId, ref: "Bookshelf" },
+      }
     ],
-    // borrowedBooks: [
-    //   {
-    //     borrowedBook: { type: Schema.Types.ObjectId, ref: "BorrowedBook" },
-    //     bookshelf: { type: Schema.Types.ObjectId, ref: "Bookshelf" },
-    //   }
-    // ],
-    donatedBooks: [
-      { _id: { type: mongoose.Types.ObjectId, ref: "Book" } },
-      { _id: { type: mongoose.Types.ObjectId, ref: "Bookshelf" } },
-    ],
-    // donatedBooks: [
-    //   {
-    //     book: { type: Schema.Types.ObjectId, ref: "Book" },
-    //     bookshelf: { type: Schema.Types.ObjectId, ref: "Bookshelf" },
-    //   }
-    // ],
     
-    comments: [{ _id: { type: mongoose.Types.ObjectId, ref: "Comment" } }],
-    // comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+    donatedBooks: [
+      {
+        book: { type: Schema.Types.ObjectId, ref: "Book" },
+        bookshelf: { type: Schema.Types.ObjectId, ref: "Bookshelf" },
+      }
+    ],
+    
+    comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
 
 
     role: {
@@ -70,6 +62,11 @@ userSchema.pre("save", async function (next) {    //Mongoose pre-save hook
     return next(err);
   }
 });
+
+// Instance method to compare passwords
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password);
+};
 
 const User = mongoose.model("User", userSchema);
 

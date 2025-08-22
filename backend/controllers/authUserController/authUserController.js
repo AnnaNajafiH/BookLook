@@ -40,10 +40,10 @@ export const createUser = async (req, res, next) => {
       res
         .cookie("token", token, {
           path: "/",
-          httpOnly: false,
+          httpOnly: true,
           expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-          sameSite: "strict",
-          secure: true,
+          sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+          secure: process.env.NODE_ENV === "production",
         })
         .status(201)
         .json({

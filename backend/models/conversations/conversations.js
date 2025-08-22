@@ -4,10 +4,10 @@ const { Schema } = mongoose;
 
 const conversationSchema = new Schema(
   {
-    groupTitle: { type: String },
-    members: { type: Array },
-    lastMessage: { type: String },
-    messageSenderId: { type: String },
+    title: { type: String },
+    participants: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    lastMessage: { type: Schema.Types.ObjectId, ref: "Message" },
+    lastMessageSender: { type: Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );

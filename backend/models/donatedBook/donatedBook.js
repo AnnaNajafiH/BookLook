@@ -7,7 +7,8 @@ const donatedBookSchema = new Schema(
   {
     title: { type: String, required: true },
     author: { type: String, required: true },
-    ISBN: { type: String, trim: true, unique: true },
+    isbn: { type: String, trim: true, unique: true, sparse: true },
+    donor: { type: Schema.Types.ObjectId, ref: "User" },
     message: { type: String },
     dateDonated: { type: Date, default: Date.now },
   },

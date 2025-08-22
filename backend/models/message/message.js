@@ -4,9 +4,9 @@ const { Schema } = mongoose;
 
 const messageSchema = new Schema(
   {
-    conversationId: { type: String },
+    conversation: { type: Schema.Types.ObjectId, ref: "Conversation", required: true },
     textMessage: { type: String },
-    sender: { type: String },
+    sender: { type: Schema.Types.ObjectId, ref: "User", required: true },
     images: [{ type: String }],
   },
   { timestamps: true }

@@ -1,7 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import "./database/database.js";
+import globalErrorHandler from "./middlewares/globalError/globalError.js";
 
 import userRouter from "./routes/userRoutes.js";
 import authUserRouter from "./routes/authUserRoutes.js";
@@ -20,13 +22,15 @@ const app = express();
 // CORS Middleware
 app.use(
   cors({
-    origin: "*", 
+    origin: process.env.FRONTEND_URL || "http://localhost:5173", 
     credentials: true,
   })
 );
 
 // Body Parser Middleware
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(cookieParser());
 
 
 // Routes
@@ -47,13 +51,19 @@ app.get("/", (req, res) => {
 });
 
 // Invalid endpoint
-app.get("/*", (req, res) => {
-  res.send("invalid endpoint!");
+app.all("*", (req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Route not found"
+  });
 });
+
+// Global Error Handler
+app.use(globalErrorHandler);
 
 // Server Listener
 const port = process.env.PORT || 7000;
 app.listen(port, () => {
-  console.log("Server is running on port http://localhost:7000/");
+  console.log(`Server is running on port http://localhost:${port}/`);
 });
 

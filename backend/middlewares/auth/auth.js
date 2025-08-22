@@ -1,7 +1,7 @@
 import JWT from "jsonwebtoken";
 import createError from "http-errors";
 import mongoose from "mongoose";
-import User from "../../models/user/index.js";
+import User from "../../models/user/user.js";
 
 //====================================================================
 // Verify token

@@ -4,8 +4,7 @@ const generateToken = (user) => {
   const token = JWT.sign(
     {
       id: user._id,
-      admin: user.role.admin,
-      financeManager: user.role.financeManager,
+      role: user.role,
     },
     process.env.JWT_SECRET,
     {

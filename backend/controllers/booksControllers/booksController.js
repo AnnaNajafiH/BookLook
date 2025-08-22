@@ -18,7 +18,7 @@ export const createBook = async(req, res, next)=>{
     }= req.body;
 
 
-if (!title | !author | !shelfId){
+if (!title || !author || !shelfId){
     return res.status(400).json({message: 'Title, author and bookshelfId are required'});
 }
 

@@ -23,14 +23,13 @@ const bookshelfSchema = new Schema(
 
     borrowedBooks: [{ type: Schema.Types.ObjectId, ref: "BorrowedBook" }],
 
-    ratings: { type: Number, min: 0, max: 5 },  
+    ratings: { type: Number, min: 0, max: 5, default: 0 },  
     reviews: [
       {
-        user: { type: Object },
-        rating: { type: Number },
+        user: { type: Schema.Types.ObjectId, ref: "User" },
+        rating: { type: Number, min: 1, max: 5 },
         comment: { type: String },
-        shelfId: { type: String },
-        createdAt: { type: Date, default: Date.now() },
+        createdAt: { type: Date, default: Date.now },
       },
     ],
   },

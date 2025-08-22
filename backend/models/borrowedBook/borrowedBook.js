@@ -4,8 +4,9 @@ const { Schema } = mongoose;
 const borrowedBookSchema = new Schema(
   {
     book: { type: Schema.Types.ObjectId, ref: "Book", required: true },
+    borrower: { type: Schema.Types.ObjectId, ref: "User"},
     dateBorrowed: { type: Date, default: Date.now },
-    borrowedFrom: {type: Schema.Types.ObjectId, ref: "Bookshelf",required: true,},
+    borrowedFrom: { type: Schema.Types.ObjectId, ref: "Bookshelf", required: true },
     ratings: { type: Number , min: 0, max: 5},
 
     reviews: [
